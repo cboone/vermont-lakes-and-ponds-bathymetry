@@ -1,6 +1,6 @@
 # Vermont Lakes + Ponds Bathymetry
 
-<iframe width="100%" height="600" frameborder="0" title="Felt Map" src="https://felt.com/embed/map/Vermont-Lakes-Ponds-Bathymetry-dcDtYi3NT36UCpbrhi6udA?loc=44.301,-72.716,8.2z"></iframe>
+[![](felt-map.png)](https://felt.com/map/Vermont-Lakes-Ponds-Bathymetry-dcDtYi3NT36UCpbrhi6udA)
 
 ## Sources
 
