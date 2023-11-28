@@ -8,6 +8,8 @@ The processed files:
 - [Vermont (non-Champlain) lake and pond isobaths as GeoJSON](https://github.com/cboone/vermont-lakes-and-ponds-bathymetry/blob/main/bathymetry/vt-bathymetry.geojson)
 - [Combined bathymetry as PMTiles](https://github.com/cboone/vermont-lakes-and-ponds-bathymetry/blob/main/bathymetry/vt-combined-bathymetry.pmtiles)
 
+View the combined bathymetry [on Felt](https://felt.com/map/Vermont-Lakes-Ponds-Bathymetry-dcDtYi3NT36UCpbrhi6udA) or via [the PMTiles Viewer](https://protomaps.github.io/PMTiles/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fcboone%2Fvermont-lakes-and-ponds-bathymetry%2Fmain%2Fbathymetry%2Fvt-combined-bathymetry.pmtiles#map=6.16/44.397/-71.466).
+
 [![](felt-map.png)](https://felt.com/map/Vermont-Lakes-Ponds-Bathymetry-dcDtYi3NT36UCpbrhi6udA)
 
 ## Sources
