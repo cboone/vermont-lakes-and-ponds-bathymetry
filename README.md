@@ -1,6 +1,6 @@
 # Vermont Lakes + Ponds Bathymetry
 
-Isobaths (underwater contour lines) generated for all Vermont lakes and ponds with available bathymetric data. Currently that's a small fraction of the actual lakes and ponds in Vermont.
+Isobaths (underwater contour lines) generated for all Vermont lakes and ponds with available bathymetric data. Currently that's a small fraction of the actual lakes and ponds in Vermont. Generated for use on [the Catamount Hardware Ice Atlas](https://catamounthardware.com/atlas/).
 
 The processed files:
 
