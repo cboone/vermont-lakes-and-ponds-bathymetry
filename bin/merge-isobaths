@@ -11,7 +11,7 @@ function main {
 
     tippecanoe \
       --force \
-      --output="bathymetry/vt-bathymetry.pmtiles" \
+      --output="bathymetry/vt-combined-bathymetry.pmtiles" \
       --maximum-zoom=14 \
       --minimum-zoom=0 \
       --drop-densest-as-needed \
