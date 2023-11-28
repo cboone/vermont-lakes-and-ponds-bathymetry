@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC2155
+declare -r command_name=$(basename "$0")
+
+set -e
+
+function main {
+  (
+    set -x
+
+    wget \
+      --directory-prefix "soundings" \
+      "http://maps.vcgi.vermont.gov/gisdata/vcgi/packaged_zips/ElevationDEM_LKCHDEM.zip"
+
+    unzip \
+      "soundings/ElevationDEM_LKCHDEM.zip" \
+      -d "soundings/ElevationDEM_LKCHDEM"
+
+    wget \
+      --output-document "soundings/vt-bathymetric-data.csv" \
+      "https://opendata.arcgis.com/api/v3/datasets/b152a736dccc40b7a67ea2dc007500b0_0/downloads/data?format=csv&spatialRefId=4326&where=1%3D1"
+  )
+}
+
+echo "[$command_name] Started at $(date -u '+%Y-%m-%d %H:%M:%S')"
+main "$@"
+echo "[$command_name] Finished at $(date -u '+%Y-%m-%d %H:%M:%S')"

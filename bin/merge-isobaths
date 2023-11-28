@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC2155
+declare -r command_name=$(basename "$0")
+
+set -e
+
+function main {
+  (
+    set -x
+
+    tippecanoe \
+      --force \
+      --output="bathymetry/vt-bathymetry.pmtiles" \
+      --maximum-zoom=14 \
+      --minimum-zoom=0 \
+      --drop-densest-as-needed \
+      --named-layer="vt-bathymetry:bathymetry/vt-bathymetry.geojson" \
+      --named-layer="champlain-bathymetry:bathymetry/champlain-bathymetry.geojson"
+  )
+}
+
+echo "[$command_name] Started at $(date -u '+%Y-%m-%d %H:%M:%S')"
+main "$@"
+echo "[$command_name] Finished at $(date -u '+%Y-%m-%d %H:%M:%S')"

@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+shopt -s expand_aliases
+
+alias qgis_process="/Applications/QGIS.app/Contents/MacOS/bin/qgis_process"
+
+# shellcheck disable=SC2155
+declare -r command_name=$(basename "$0")
+
+set -e
+
+function main {
+  (
+    set -x
+
+    ogr2ogr \
+      -a_srs EPSG:4326 \
+      -oo X_POSSIBLE_NAMES="Lon*" -oo Y_POSSIBLE_NAMES="Lat*" \
+      "soundings/vt-bathymetric-data.gpkg" \
+      "soundings/vt-bathymetric-data.csv"
+
+    qgis_process run native:splitvectorlayer \
+      --no-python \
+      --INPUT="soundings/vt-bathymetric-data.gpkg|layername=vt-bathymetric-data" \
+      --FIELD=LakeName \
+      --PREFIX_FIELD=0 \
+      --FILE_TYPE=0 \
+      --OUTPUT="soundings/"
+  )
+
+  for sounding_file_path in soundings/*.gpkg; do
+    local sounding_filename
+    sounding_filename=$(basename "$sounding_file_path" | cut -d. -f1)
+
+    (
+      set -x
+
+      qgis_process run contourplugin:generatecontours \
+        --distance_units=feet \
+        --area_units=ha \
+        --ellipsoid=EPSG:7030 \
+        --InputLayer="$sounding_file_path|layername=$sounding_filename" \
+        --InputField='"DepthInFeet"' \
+        --DuplicatePointTolerance=10 \
+        --ContourType=0 \
+        --ContourMethod=4 \
+        --NContour=100 \
+        --ContourLevels='-400 -350 -300 -250 -200 -150 -100 -80 -60 -50 -40 -25 -20 -15 -10 -5' \
+        --LabelDecimalPlaces=0 \
+        --LabelTrimZeros=true \
+        --LabelUnits= \
+        --OutputLayer="isobaths/vermont/$sounding_filename.gpkg"
+    )
+  done
+
+  (
+    set -x
+
+    ogrmerge.py \
+      -overwrite_ds \
+      -single \
+      -nln "vt-bathymetry" \
+      -src_layer_field_name LakeName \
+      -o "bathymetry/vt-bathymetry.geojson" \
+      "isobaths/vermont/*.gpkg"
+  )
+}
+
+echo "[$command_name] Started at $(date -u '+%Y-%m-%d %H:%M:%S')"
+main "$@"
+echo "[$command_name] Finished at $(date -u '+%Y-%m-%d %H:%M:%S')"

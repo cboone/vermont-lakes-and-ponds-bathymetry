@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC2155
+declare -r command_name=$(basename "$0")
+
+set -e
+
+function main {
+  bin/download-bathymetric-data
+  bin/generate-champlina-isobaths
+  bin/generate-vt-isobaths
+}
+
+echo "[$command_name] Started at $(date -u '+%Y-%m-%d %H:%M:%S')"
+main "$@"
+echo "[$command_name] Finished at $(date -u '+%Y-%m-%d %H:%M:%S')"

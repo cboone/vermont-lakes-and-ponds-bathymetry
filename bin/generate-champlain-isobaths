@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+shopt -s expand_aliases
+
+alias qgis_process="/Applications/QGIS.app/Contents/MacOS/bin/qgis_process"
+
+# shellcheck disable=SC2155
+declare -r command_name=$(basename "$0")
+
+set -e
+
+function main {
+  (
+    set -x
+
+    ogr2ogr \
+      -t_srs EPSG:4326 \
+      "soundings/ElevationDEM_LKCHDEM.gpkg" \
+      "soundings/ElevationDEM_LKCHDEM"
+
+    qgis_process run contourplugin:generatecontours \
+      --distance_units=feet \
+      --area_units=ha \
+      --ellipsoid=EPSG:7030 \
+      --InputLayer="soundings/ElevationDEM_LKCHDEM.gpkg|layername=Elevation_LKCHDEM_point" \
+      --InputField='"DEPTH_FT"' \
+      --DuplicatePointTolerance=10 \
+      --ContourType=0 \
+      --ContourMethod=3 \
+      --NContour=100 \
+      --ContourInterval=10 \
+      --ContourLevels= \
+      --LabelDecimalPlaces=0 \
+      --LabelTrimZeros=true \
+      --LabelUnits= \
+      --OutputLayer="isobaths/champlain-unsmoothed.gpkg"
+
+    qgis_process run native:smoothgeometry \
+      --distance_units=feet \
+      --area_units=ha \
+      --ellipsoid=EPSG:7030 \
+      --no-python \
+      --INPUT="isobaths/champlain-unsmoothed.gpkg" \
+      --ITERATIONS=1 \
+      --OFFSET=0.5 \
+      --MAX_ANGLE=180 \
+      --OUTPUT="isobaths/champlain-smoothed.gpkg"
+
+    ogr2ogr "bathymetry/champlain-bathymetry.geojson" "isobaths/champlain-smoothed.gpkg"
+  )
+}
+
+echo "[$command_name] Started at $(date -u '+%Y-%m-%d %H:%M:%S')"
+main "$@"
+echo "[$command_name] Finished at $(date -u '+%Y-%m-%d %H:%M:%S')"
