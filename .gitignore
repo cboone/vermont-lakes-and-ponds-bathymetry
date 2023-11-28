@@ -1,0 +1,6 @@
+**/*.gpkg
+isobaths/**/*.geojson
+soundings/ElevationDEM_LKCHDEM/ElevationDEM_LKCHDEM.*
+soundings/ElevationDEM_LKCHDEM/Elevation_LKCHDEM*
+soundings/*.csv
+soundings/*.zip
